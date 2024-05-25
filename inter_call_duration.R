@@ -1,7 +1,7 @@
 #this script is calculating the time between the rhythmic calls
 
-wd <- "C:/Users/egrout/Dropbox/coaticalls/Galaxy_labels/completed_labels/labels_cleaned_25.02.24/"
-plot_dir <- "C:/Users/egrout/Dropbox/coaticalls/results/"
+wd <- "C:/Users/egrout/Dropbox/calls/Galaxy_labels/completed_labels/"
+plot_dir <- "C:/Users/egrout/Dropbox/calls/results/"
 
 setwd <- wd
 
@@ -15,6 +15,7 @@ library(RColorBrewer)
 library(ggthemes)
 library(ggplot2)
 library(gridExtra)
+library(lubridate)
 
 # get a list of all the CSV files in the folder
 files <- list.files(wd, pattern = "*.csv")
@@ -28,7 +29,7 @@ colnames(all_data) <- c("label","Start","Duration","Time","Format","Type","Descr
 for (i in 1:length(files)) {
   # read in the CSV data as a tibble
   # using header = TRUE assumes the first row of each CSV file is a header with column names
-  file_data <- read.csv(paste0(wd, files[i]), header = T)
+  file_data <- read.csv(paste0(wd, files[i]), header = T, sep="\t")
   
   # add a column with the row names (i.e. the name of the CSV file)
   file_data$file_name <- files[i]
@@ -121,6 +122,39 @@ all_data_cleaned <- all_data_cleaned[!grepl("insect", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("rain", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("eating", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("collar", all_data_cleaned$label),]
+all_data_cleaned <- all_data_cleaned[!grepl("scatch", all_data_cleaned$label),]
+
+
+#cleaning call labels
+all_data_cleaned$label[all_data_cleaned$label == "chirp "] <- "chirp"
+all_data_cleaned$label[all_data_cleaned$label == "chrip"] <- "chirp"
+all_data_cleaned$label[all_data_cleaned$label == "chirp x"] <- "chirp"
+all_data_cleaned$label[all_data_cleaned$label == "grnt"] <- "grunt"
+all_data_cleaned$label[all_data_cleaned$label == "gunt"] <- "grunt"
+all_data_cleaned$label[all_data_cleaned$label == "spueal"] <- "squeal"
+all_data_cleaned$label[all_data_cleaned$label == "nf chitter "] <- "nf chitter"
+all_data_cleaned$label[all_data_cleaned$label == "nf chitter x"] <- "nf chitter"
+all_data_cleaned$label[all_data_cleaned$label == "chitter x "] <- "chitter"
+all_data_cleaned$label[all_data_cleaned$label == "chitter x"] <- "chitter"
+all_data_cleaned$label[all_data_cleaned$label == "chitter "] <- "chitter"
+all_data_cleaned$label[all_data_cleaned$label == "dc x"] <- "dc"
+all_data_cleaned$label[all_data_cleaned$label == "bob"] <- "bop"
+all_data_cleaned$label[all_data_cleaned$label == "chirpgr x"] <- "chirp grunt"
+all_data_cleaned$label[all_data_cleaned$label == "chirpgr "] <- "chirp grunt"
+all_data_cleaned$label[all_data_cleaned$label == "chirpgr"] <- "chirp grunt"
+all_data_cleaned$label[all_data_cleaned$label == "low peep"] <- "peep"
+all_data_cleaned$label[all_data_cleaned$label == "chirp click "] <- "chirp click"
+all_data_cleaned$label[all_data_cleaned$label == "chirp cick"] <- "chirp click"
+all_data_cleaned$label[all_data_cleaned$label == "chirpr"] <- "chirp grunt"
+all_data_cleaned$label[all_data_cleaned$label == "chirgpr"] <- "chirp grunt"
+all_data_cleaned$label[all_data_cleaned$label == "click grnut"] <- "click grunt"
+all_data_cleaned$label[all_data_cleaned$label == "squeal chitters"] <- "squeal chittering"
+all_data_cleaned$label[all_data_cleaned$label == "squeal chitter"] <- "squeal chittering"
+all_data_cleaned$label[all_data_cleaned$label == "squeal chitter x"] <- "squeal chittering"
+all_data_cleaned$label[all_data_cleaned$label == "squeal chitter x"] <- "squeal chittering"
+all_data_cleaned$label[all_data_cleaned$label == "chitter squeal"] <- "squeal chittering"
+all_data_cleaned$label[all_data_cleaned$label == "low squeal"] <- "squeal"
+all_data_cleaned$label[all_data_cleaned$label == "squeal "] <- "squeal"
 
 
 #remove nf calls
@@ -178,7 +212,7 @@ ggplot(cleaned_diff_time, aes(y = label, x = diff_time_s)) +
 # Filter the data for rows where diff_time is less than 1 second
 filtered_data <- cleaned_diff_time[cleaned_diff_time$diff_time_s < 1, ]
 
-#removing calls not interested in
+#removing calls not interested in as they're not rhythmic
 excluded_call_types <- c("growl", "snort", "chuckle", "click", "grunt", "chirp grunt", "chirp click", "chirp", "bop", "hum", "snore", "squeal chittering")
 
 filtered_data$label[filtered_data$label == "dc"] <- "dolphin call"
@@ -195,7 +229,7 @@ filtered_data <- filtered_data %>%
 
 png(height = 600, width = 1000, units = 'px', filename = paste0(plot_dir, "intercall_timediff.png"))
 ggplot(filtered_data, aes(y = label, x = diff_time_s)) +
-  geom_violin(fill = "dodgerblue1") +
+  geom_violin(fill = "plum") +
   labs(
     #title = "Distribution of diff_time for Call Types (diff_time < 1 seconds)",
     y = "Call Type",
@@ -206,21 +240,114 @@ dev.off()
 
 
 
+#now want to look at which call follows which call - sequential data
+
+#just use the cleaned dataframe
+#first need to split calls which have 2 components e.g. chirp grunt - to make the grunt follow the chirp
+
+# Split "chirp grunt" into two rows - have to run this manually for chirp grunt, chirp click, and click grunt
+chirp_click_split <- cleaned %>%
+  filter(label == "chirp click") %>%
+  rowwise() %>%
+  do(data.frame(
+    id = .$id,
+    label = c("chirp", "click"),
+    datetime = c(.$datetime, .$datetime + seconds(0.1)),
+    #other_col1 = c(.$other_col1[1], .$other_col1[1]),   # Fill in NA with original values
+    #other_col2 = c(.$other_col2[1], .$other_col2[1]),   # Fill in NA with original values
+    stringsAsFactors = FALSE
+  ))
+
+# Combine with the original dataframe excluding the original "chirp grunt" rows
+cleaned <- cleaned %>%
+  filter(label != "chirp click") %>%
+  bind_rows(chirp_click_split) %>%
+  arrange(id, datetime)
+
+unique(cleaned$label)
 
 
+# # Define function to split calls
+# split_calls <- function(df, call_type, split_time) {
+#   call_split <- df %>%
+#     filter(label == call_type) %>%
+#     rowwise() %>%
+#     do(data.frame(
+#       id = .$id,
+#       label = c(call_type %>% strsplit(" ")[[1]] %>% unlist(), call_type %>% strsplit(" ")[[2]] %>% unlist()),
+#       datetime = c(.$datetime, .$datetime + seconds(split_time)),
+#       stringsAsFactors = FALSE
+#     ))
+#   return(call_split)
+# }
+# #not working yet.... 
+# 
+# # Split "chirp grunt", "chirp click", and "click grunt" into two rows each
+# chirp_grunt_split <- split_calls(cleaned, "chirp grunt", 0.1)
+# chirp_click_split <- split_calls(cleaned, "chirp click", 0.1)
+# click_grunt_split <- split_calls(cleaned, "click grunt", 0.1)
+# 
+# # Combine with the original dataframe excluding the original "chirp grunt", "chirp click", and "click grunt" rows
+# cleaned <- cleaned %>%
+#   filter(!label %in% c("chirp grunt", "chirp click", "click grunt")) %>%
+#   bind_rows(chirp_grunt_split, chirp_click_split, click_grunt_split) %>%
+#   arrange(id, datetime)
 
 
+#now making the dataframe to get the order of calls
+# Add a date column if it's not already present
+cleaned$date <- as.Date(cleaned$datetime)
+
+# Prepare the data
+calls <- cleaned %>%
+  arrange(id, datetime) %>%  # Arrange by individual and time
+  group_by(id) %>%  # Group by individual
+  mutate(next_call_type = if_else(lead(date) == date, lead(label), NA_character_)) %>%  # Create a column for the next call type
+  filter(!is.na(label))  # Remove rows where the next call type is NA
+
+# Create a list to store matrices for each individual
+transition_matrices <- list()
+
+# Get the unique individuals
+individuals <- unique(calls$id)
+
+# Generate transition matrices for each individual
+for (ind in individuals) {
+  # Filter data for the individual
+  individual_calls <- calls %>%
+    filter(id == ind)
+  
+  # Create a contingency table (transition matrix)
+  transition_matrix <- table(individual_calls$label, individual_calls$next_call_type)
+  # Normalize the transition matrix by row sums to get probabilities (if needed)
+  transition_matrix <- prop.table(transition_matrix, 1)
+  # Store the transition matrix in the list
+  transition_matrices[[ind]] <- transition_matrix
+}
+
+# Example of accessing and printing the transition matrix for a specific individual
+print(transition_matrices[[1]])  # Replace 1 with the index of the desired individual
 
 
+for (i in seq_along(transition_matrices)) {
+  transition_matrix <- transition_matrices[[i]]
+  transition_df <- as.data.frame(as.table(transition_matrix))
+  colnames(transition_df) <- c("From", "To", "Frequency")
+  
+  p <- ggplot(transition_df, aes(x = From, y = To, fill = Frequency)) +
+    geom_tile(color = "white") +
+    scale_fill_gradient(low = "white", high = "steelblue") +
+    labs(title = paste("Transition Matrix for Individual", names(transition_matrices)[i]),
+         x = "From Call Type",
+         y = "To Call Type") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+}
 
+p
 
-
-
-
-
-
-
+#NEXT: is there a way of combining all the matrices of each ind into one?
 
 
 

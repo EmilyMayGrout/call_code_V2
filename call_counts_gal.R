@@ -1,7 +1,7 @@
 #this script is reading in the call labels in the completed labels folder on OwnCloud and calculating call counts for each individual
 
-wd <- "C:/Users/egrout/Dropbox/coaticalls/Galaxy_labels/completed_labels/labels_25.02.24/"
-plot_dir <- "C:/Users/egrout/Dropbox/coaticalls/results/"
+wd <- "C:/Users/egrout/Dropbox/calls/Galaxy_labels/completed_labels/"
+plot_dir <- "C:/Users/egrout/Dropbox/calls/results/"
 
 setwd <- wd
 
@@ -120,6 +120,8 @@ all_data_cleaned <- all_data_cleaned[!grepl("howler", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("collar", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("start", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("stop", all_data_cleaned$label),]
+all_data_cleaned <- all_data_cleaned[!grepl("fission", all_data_cleaned$label),]
+all_data_cleaned <- all_data_cleaned[!grepl("fusion", all_data_cleaned$label),]
 
 
 #remove nf calls
@@ -155,6 +157,7 @@ all_data_cleaned$label[all_data_cleaned$label == "squeal chitter"] <- "squeal ch
 all_data_cleaned$label[all_data_cleaned$label == "squeal chitter x"] <- "squeal chittering"
 all_data_cleaned$label[all_data_cleaned$label == "squeal chitter x"] <- "squeal chittering"
 all_data_cleaned$label[all_data_cleaned$label == "chitter squeal"] <- "squeal chittering"
+all_data_cleaned$label[all_data_cleaned$label == "low squeal"] <- "squeal"
 
 
 unique(all_data_cleaned$label)
@@ -163,7 +166,7 @@ table(all_data_cleaned$label)
 
 cleaned <- all_data_cleaned
 
-#remove calls which are not described in the repertoire paper where the sample size is also super small
+#remove calls which are not described in the repertoire paper or calls where the sample size is also super small
 
 cleaned <- cleaned[!grepl("chop chop", cleaned$label),]
 cleaned <- cleaned[!grepl("peep", cleaned$label),]
@@ -171,6 +174,8 @@ cleaned <- cleaned[!grepl("purr", cleaned$label),]
 cleaned <- cleaned[!grepl("quack", cleaned$label),]
 cleaned <- cleaned[!grepl("snarl", cleaned$label),]
 cleaned <- cleaned[!grepl("squeal chittering", cleaned$label),]
+cleaned <- cleaned[!grepl("cackling", cleaned$label),]
+
 #cleaned[cleaned == "chirpgr"] <- "chirp grunt"
 
 
@@ -307,6 +312,7 @@ newtable <- merge(cleaned, ids, by  = "id", all.x = T, all.y = T)
 
 Spectral_edit <- c("#9E0142", "#D53E4F", "#F46D43", "#FDAE61", "#FEE08B", "#FFFFBF", "#E6F598", "#ABDDA4", "#66C2A5", "#3288BD", "#5E4FA2")
 
+
 Paired_edit <- c("#A6CEE3", "#1F78B4", "#A2CD5A", "#33A02C", "#FB9A99", "#E31A1C", "#FDBF6F", "#FF7F00", "#CDB5CD", "#8B4789", "#00868B")
 Paired_5 <- c("#CDB5CD", "#A2CD5A","#E31A1C", "#FF7F00",  "#00868B")
 
@@ -395,18 +401,50 @@ ggplot(call_rates_class_filt, aes(x = call_type, y = rate))+ geom_col(aes(fill =
 dev.off()
 
 #want to change order of this plot so it's in the long format and the x axis is call rate and y axis is call type
+#
+#
+#
+#-------------------------------------------------------------------
+#plot for paper:
 
-ggplot(call_rates_class_filt, aes(x = rate, y = name))+ 
-  geom_point(aes(color = call_type)) +
+Paired_edit <- c("aquamarine2","darkorchid4", "darkorchid", "darkorchid1", "orange", "darkorange2", "darkorange4")
+#bark, chirp, chirp click, chirp grunt, chitter, dc, squeal- color to function
+
+#want to make the age/sex class label smaller
+
+call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Adult Female"] <- "A-F"
+call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Adult Male"] <- "A-M"
+call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Sub-adult Male"] <- "SA-M"
+call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Sub-adult Female"] <- "SA-F"
+call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Juvenile Female"] <- "J-F"
+
+
+gg <- ggplot(call_rates_class_filt, aes(x = rate, y = name))+ 
+  geom_jitter(aes(color = call_type), size = 4, width = 0, height = 0.1, alpha = 0.8) +
   scale_x_continuous(limits = c(0,250))+# panel spacing
+  scale_color_manual(values = Paired_edit) +
 facet_grid(vars(age_sex), scales = "free", space = "free") +
   theme_bw() +
-  theme(panel.grid = element_blank())
+  ylab("Individual") + 
+  theme(panel.grid = element_blank(),  # Remove panel grid
+  axis.title = element_text(size = 20),  # Increase axis title size
+  axis.text = element_text(size = 16),  # Increase axis text size
+  strip.text.y = element_text(size = 16, angle = 0),  # Increase facet text size
+  legend.text = element_text(size = 16),  # Increase legend text size
+  legend.title = element_text(size = 18),
+  strip.placement = "outside")  + 
+  labs(color='Call type')
+
+gg
+
+ggsave(filename = paste0(plot_dir, 'call_rates_gal2.png'), plot = gg, width = 12, height = 8, dpi = 300)
+
+
 
 #save call rates for each ind
-save(call_rates_class_filt, file = "C:/Users/egrout/Dropbox/coaticalls/Galaxy_labels/coati_call_rates.Rda")
+save(call_rates_class_filt, file = "C:/Users/egrout/Dropbox/calls/Galaxy_labels/coati_call_rates.Rda")
 #save as a csv file
-write.csv(call_rates_class_filt, "C:/Users/egrout/Dropbox/coaticalls/Galaxy_labels/coati_call_rates.csv", row.names=FALSE, quote=FALSE) 
+write.csv(call_rates_class_filt, "C:/Users/egrout/Dropbox/calls/Galaxy_labels/coati_call_rates.csv", row.names=FALSE, quote=FALSE) 
 
 
 #--------------------------------------------------------------------------------------------
@@ -420,7 +458,7 @@ dev.off()
 
 #Zipfs law - plotting call duration and total call count for all inds
 
-all_count <- all_data_cleaned[,c(1,3,5)]
+all_count <- all_data_cleaned[,c(1,3,5,9)]
 
 #turn duration into numeric by removing the "0:" to put it into seconds
 all_count$Duration <- gsub("0:", "", all_count$Duration)
@@ -565,13 +603,18 @@ ggsave(filename, combined_plot, height = 8, width = 10, units = "in")
 
 file_count <- data.frame(files)
 file_count$id <- str_extract(file_count$files, ".+?(?=_)")
+
+#add G to start of coati_ids so can merge
+coati_ids$id <- paste0("G", coati_ids$id)
+
+
 colnames(coati_ids)[colnames(coati_ids) == "V2"] <- "id"
 
 merged_data <- merge(coati_ids, file_count, by = "id", all = T)
 
 png(height = 1000, width = 1500, units = 'px', filename = paste0(plot_dir, "number_of_files_labelled.png"))
 par(mar = c(9, 4, 4, 2) + 2)
-barplot(table(merged_data$V1), xlab = "", ylab = "Number of files labelled", col = "aquamarine4", cex.lab = 3, cex.axis = 3, cex.names = 3, las = 2)
+barplot(table(merged_data$V1), xlab = "", ylab = "Number of files labelled", col = "darkorange2", cex.lab = 3, cex.axis = 3, cex.names = 3, las = 2)
 dev.off()
 
 

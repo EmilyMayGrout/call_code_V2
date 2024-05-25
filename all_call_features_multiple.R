@@ -784,7 +784,7 @@ boxplot(kurtosis ~ name, prop)
 ### NEED TO ADD SUM_CALLS TO THIS DATAFRAME (TO GET NUMBER OF CALLS USED FOR THE ACOUSTIC ANALYSIS)
 
 #make empty dataframe with same number of columns in prop and same number of rows as call type
-stand_dev <- data.frame(matrix(ncol = ((length(keep) + 6)), nrow = length(unique(prop$name))))
+stand_dev <- data.frame(matrix(ncol = ((length(keep) + 7)), nrow = length(unique(prop$name))))
 colnames(stand_dev) <- colnames(prop)
 #remove column with filename
 stand_dev <- stand_dev[ , !names(stand_dev) %in% c("file")] 
@@ -827,27 +827,27 @@ for (i in 1:nrow(stand_dev)){
 
 
 #remove columns not wanted in paper and reordering call types
-stand_dev2 <- stand_dev[,c("name","duration", "dom_freq", "sh", "sfm", "Q25", "Q75", "IQR")]
+stand_dev2 <- stand_dev[,c("name","sum_calls","duration", "dom_freq", "sh", "sfm", "Q25", "Q75", "IQR")]
 
 #manually order the table by name
 stand_dev2 <- stand_dev2 %>% arrange(factor(name, levels = c("chirp", "click", "grunt", "chitter", "squeal", "growl", "bark", "dc", "hum", "vibrate" )))
 
 #colnames(filt2)[colnames(filt2) == "mode"] <- "Dominant Frequency (Hz)"
 
-write.table(stand_dev2,  file = "C:/Users/egrout/Dropbox/coaticalls/results/call_descriptions3.csv", quote = FALSE, sep ="\t" ,row.names = TRUE, col.names = TRUE)
-write.table(stand_dev,  file = "C:/Users/egrout/Dropbox/coaticalls/results/call_descriptions2.csv", quote = FALSE, sep ="\t" ,row.names = TRUE, col.names = TRUE)
+write.table(stand_dev2,  file = "C:/Users/egrout/Dropbox/calls/results/call_descriptions3.csv", quote = FALSE, sep ="\t" ,row.names = TRUE, col.names = TRUE)
+write.table(stand_dev,  file = "C:/Users/egrout/Dropbox/calls/results/call_descriptions2.csv", quote = FALSE, sep ="\t" ,row.names = TRUE, col.names = TRUE)
 
 #make a box and whisker plot for the duration of calls for each call type
 
 dur_df <- prop[,c("duration", "name")]
-png(height = 900, width = 1200, units = 'px', filename = "C:/Users/egrout/Dropbox/coaticalls/results/durations.png")
+png(height = 900, width = 1200, units = 'px', filename = "C:/Users/egrout/Dropbox/calls/results/durations.png")
 par(mar = c(10,15,5,5), mgp=c(6,2.5,0)) #c(bottom, left, top, right)
 boxplot(dur_df$duration ~dur_df$name, ylab = "", xlab = "Call Duration (s)",col = plot.colors, method = "jitter", vertical = F, pch = 1, las = 1, horizontal = TRUE, cex.axis = 3, cex.lab = 3)
 dev.off()
 
 #make a box and whisker plot for dominant frequency for each call type
 dur_df <- prop[,c("dom_freq", "name")]
-png(height = 900, width = 1200, units = 'px', filename = "C:/Users/egrout/Dropbox/coaticalls/results/dom_freq.png")
+png(height = 900, width = 1200, units = 'px', filename = "C:/Users/egrout/Dropbox/calls/results/dom_freq.png")
 par(mar = c(10,15,5,5), mgp=c(6,2.5,0)) #c(bottom, left, top, right)
 boxplot(dur_df$dom_freq ~dur_df$name, ylab = "", xlab = "Dominant Frequency (Hz)",col = plot.colors, method = "jitter", vertical = F, pch = 1, las = 1, horizontal = TRUE, cex.axis = 3, cex.lab = 3)
 dev.off()
@@ -856,7 +856,7 @@ dev.off()
 
 dur_dom <- prop[,c("duration", "name", "dom_freq")]
 
-plot(dur_dom$duration, dur_dom$dom_freq, )
+plot(log(dur_dom$duration), dur_dom$dom_freq)
 
 
 
