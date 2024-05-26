@@ -852,6 +852,50 @@ par(mar = c(10,15,5,5), mgp=c(6,2.5,0)) #c(bottom, left, top, right)
 boxplot(dur_df$dom_freq ~dur_df$name, ylab = "", xlab = "Dominant Frequency (Hz)",col = plot.colors, method = "jitter", vertical = F, pch = 1, las = 1, horizontal = TRUE, cex.axis = 3, cex.lab = 3)
 dev.off()
 
+
+# Define the filename for saving the plot
+filename <- "C:/Users/egrout/Dropbox/calls/results/durations_and_dom_freq.png"
+
+# Set up the plot
+png(filename, height = 900, width = 1200, units = 'px')
+par(mar = c(10, 8, 2, 10), mgp = c(6, 1, 0))  # c(bottom, left, top, right))
+
+# Plot the data
+dur_df <- prop[, c("duration", "dom_freq", "name")]
+
+# Scale the duration values for better visualization
+scale <- 50000
+scaled_duration <- dur_df$duration * scale  # Adjust the scaling factor as needed
+
+# Create the plot with the scaled duration values
+boxplot(scaled_duration ~ dur_df$name, ylab = " ", xlab = "", col = "plum", border = "black", method = "jitter", pch = 1, las = 2, horizontal = FALSE, boxwex = 0.3, cex.axis = 2, cex.lab = 2, yaxt = "n")
+mtext("Duration (s)", side = 2, line = 5, cex = 2)
+mtext("Call Type", side = 1, line = 7, cex = 2)
+
+# Calculate positions for the second boxplot
+num_categories <- length(unique(dur_df$name))
+width <- 0.4  # Adjust as needed
+positions <- seq(1, by = 1, length.out = num_categories) + width
+
+# Overlay the boxplots for dominant frequency
+boxplot(dur_df$dom_freq ~ dur_df$name, add = TRUE, col = "paleturquoise", border = "black", method = "jitter", boxwex = 0.3, pch = 1, horizontal = FALSE, axes = FALSE, at = positions)
+
+# Add secondary y-axis for dominant frequency
+axis(side = 4, las = 2, cex.axis = 2) #need to fix this axis
+
+# Add legend
+legend("topright", legend = c("Duration", "Dominant Frequency"), fill = c("plum", "paleturquoise"),  border = NA, bty = "n", cex = 2)
+mtext("Frequency (Hz)", side = 4, line = 8, cex = 2)
+
+# Change y-axis labels
+axis(side = 2, at = c(0, 5000, 10000, 15000, 20000, 25000, 30000), labels = c(0, (5000/scale), (10000/scale), (15000/scale), (20000/scale), (25000/scale), (30000/scale)), las = 2, cex.axis = 2)
+
+
+# Turn off the device
+dev.off()
+
+
+
 #can see that the lower frequency calls have longer durations!
 
 dur_dom <- prop[,c("duration", "name", "dom_freq")]

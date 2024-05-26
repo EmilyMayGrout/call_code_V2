@@ -213,7 +213,7 @@ ggplot(cleaned_diff_time, aes(y = label, x = diff_time_s)) +
 filtered_data <- cleaned_diff_time[cleaned_diff_time$diff_time_s < 1, ]
 
 #removing calls not interested in as they're not rhythmic
-excluded_call_types <- c("growl", "snort", "chuckle", "click", "grunt", "chirp grunt", "chirp click", "chirp", "bop", "hum", "snore", "squeal chittering")
+excluded_call_types <- c("growl", "chuckle", "click", "grunt", "chirp grunt", "chirp click", "chirp","bop", "hum", "snore", "squeal chittering")
 
 filtered_data$label[filtered_data$label == "dc"] <- "dolphin call"
 
@@ -221,89 +221,88 @@ filtered_data$label[filtered_data$label == "dc"] <- "dolphin call"
 
 filtered_data <- filtered_data[!filtered_data$diff_time_s == 0, ]
 
-
 filtered_data <- filtered_data %>%
   filter(!label %in% excluded_call_types)
 
-# Create a violin plot for filtered calls
+# Define the desired order of the labels
+desired_order <- c("chitter", "squeal", "dolphin call", "bark", "snort")
+
+# Convert the label variable to a factor with the desired order of levels
+filtered_data$label <- factor(filtered_data$label, levels = desired_order)
+
 
 png(height = 600, width = 1000, units = 'px', filename = paste0(plot_dir, "intercall_timediff.png"))
+# Plot the reordered data
 ggplot(filtered_data, aes(y = label, x = diff_time_s)) +
   geom_violin(fill = "plum") +
   labs(
     #title = "Distribution of diff_time for Call Types (diff_time < 1 seconds)",
     y = "Call Type",
-    x = "Time Difference (seconds)") + geom_jitter(height = 0.15, width = 0, size = 0.01, alpha = 0.1, color = "black")+
-  theme(legend.title=element_blank(), panel.grid.major = element_blank(), panel.grid.minor = element_blank(), panel.background = element_blank(), axis.text=element_text(size=20), axis.title = element_text(size = 20), legend.text = element_text(size = 20))
-
+    x = "Time Difference (seconds)") + 
+  geom_jitter(height = 0.15, width = 0, size = 0.01, alpha = 0.1, color = "black") +
+  theme(legend.title = element_blank(), 
+        panel.grid.major = element_blank(), 
+        panel.grid.minor = element_blank(), 
+        panel.background = element_blank(), 
+        axis.text = element_text(size = 20), 
+        axis.title = element_text(size = 20), 
+        legend.text = element_text(size = 20))
 dev.off()
 
 
-
 #now want to look at which call follows which call - sequential data
+unique(cleaned$label)
 
-#just use the cleaned dataframe
-#first need to split calls which have 2 components e.g. chirp grunt - to make the grunt follow the chirp
+call_to_split <- c("chirp grunt", "chirp click", "click grunt")
 
-# Split "chirp grunt" into two rows - have to run this manually for chirp grunt, chirp click, and click grunt
-chirp_click_split <- cleaned %>%
-  filter(label == "chirp click") %>%
+#double_call <- "chirp grunt"
+
+for (double_call in call_to_split){
+  
+call_split <- cleaned %>%
+  filter(label == double_call) %>%
   rowwise() %>%
   do(data.frame(
     id = .$id,
-    label = c("chirp", "click"),
+    label = strsplit(double_call, split = " ")[[1]],
     datetime = c(.$datetime, .$datetime + seconds(0.1)),
-    #other_col1 = c(.$other_col1[1], .$other_col1[1]),   # Fill in NA with original values
+    Start = c(.$Start[1], .$Start[1]),  
+    Duration = c(.$Duration[1], .$Duration[1]),   
+    file_name = c(.$file_name[1], .$filename[1]), 
+    date = c(.$date[1], .$date[1]),
+    time = c(.$time[1], .$time[1]), 
+    
     #other_col2 = c(.$other_col2[1], .$other_col2[1]),   # Fill in NA with original values
     stringsAsFactors = FALSE
   ))
 
 # Combine with the original dataframe excluding the original "chirp grunt" rows
 cleaned <- cleaned %>%
-  filter(label != "chirp click") %>%
-  bind_rows(chirp_click_split) %>%
+  filter(label != double_call) %>%
+  bind_rows(call_split) %>%
   arrange(id, datetime)
 
-unique(cleaned$label)
+}
 
-
-# # Define function to split calls
-# split_calls <- function(df, call_type, split_time) {
-#   call_split <- df %>%
-#     filter(label == call_type) %>%
-#     rowwise() %>%
-#     do(data.frame(
-#       id = .$id,
-#       label = c(call_type %>% strsplit(" ")[[1]] %>% unlist(), call_type %>% strsplit(" ")[[2]] %>% unlist()),
-#       datetime = c(.$datetime, .$datetime + seconds(split_time)),
-#       stringsAsFactors = FALSE
-#     ))
-#   return(call_split)
-# }
-# #not working yet.... 
-# 
-# # Split "chirp grunt", "chirp click", and "click grunt" into two rows each
-# chirp_grunt_split <- split_calls(cleaned, "chirp grunt", 0.1)
-# chirp_click_split <- split_calls(cleaned, "chirp click", 0.1)
-# click_grunt_split <- split_calls(cleaned, "click grunt", 0.1)
-# 
-# # Combine with the original dataframe excluding the original "chirp grunt", "chirp click", and "click grunt" rows
-# cleaned <- cleaned %>%
-#   filter(!label %in% c("chirp grunt", "chirp click", "click grunt")) %>%
-#   bind_rows(chirp_grunt_split, chirp_click_split, click_grunt_split) %>%
-#   arrange(id, datetime)
-
-
-#now making the dataframe to get the order of calls
-# Add a date column if it's not already present
 cleaned$date <- as.Date(cleaned$datetime)
+#replace dc with dolphin call
+cleaned$label[cleaned$label == "dc"] <- "dolphin call"
 
+
+# Add a date column if it's not already present
 # Prepare the data
 calls <- cleaned %>%
   arrange(id, datetime) %>%  # Arrange by individual and time
   group_by(id) %>%  # Group by individual
   mutate(next_call_type = if_else(lead(date) == date, lead(label), NA_character_)) %>%  # Create a column for the next call type
-  filter(!is.na(label))  # Remove rows where the next call type is NA
+  filter(!is.na(label) & !is.na(next_call_type))  # Remove rows where the label or next call type is NA
+
+# Get all unique call types
+all_call_types <- unique(c(calls$label, calls$next_call_type))
+
+# Create a complete transition matrix template
+empty_transition_matrix <- matrix(0, nrow = length(all_call_types), ncol = length(all_call_types),
+                                  dimnames = list(all_call_types, all_call_types))
 
 # Create a list to store matrices for each individual
 transition_matrices <- list()
@@ -319,41 +318,137 @@ for (ind in individuals) {
   
   # Create a contingency table (transition matrix)
   transition_matrix <- table(individual_calls$label, individual_calls$next_call_type)
-  # Normalize the transition matrix by row sums to get probabilities (if needed)
-  transition_matrix <- prop.table(transition_matrix, 1)
-  # Store the transition matrix in the list
-  transition_matrices[[ind]] <- transition_matrix
-}
-
-# Example of accessing and printing the transition matrix for a specific individual
-print(transition_matrices[[1]])  # Replace 1 with the index of the desired individual
-
-
-for (i in seq_along(transition_matrices)) {
-  transition_matrix <- transition_matrices[[i]]
-  transition_df <- as.data.frame(as.table(transition_matrix))
-  colnames(transition_df) <- c("From", "To", "Frequency")
   
-  p <- ggplot(transition_df, aes(x = From, y = To, fill = Frequency)) +
-    geom_tile(color = "white") +
-    scale_fill_gradient(low = "white", high = "steelblue") +
-    labs(title = paste("Transition Matrix for Individual", names(transition_matrices)[i]),
-         x = "From Call Type",
-         y = "To Call Type") +
-    theme_minimal() +
-    theme(axis.text.x = element_text(angle = 45, hjust = 1))
-
+  # Convert the table to a matrix and ensure it matches the template dimensions
+  transition_matrix <- as.matrix(transition_matrix)
+  full_transition_matrix <- empty_transition_matrix
+  full_transition_matrix[rownames(transition_matrix), colnames(transition_matrix)] <- transition_matrix
+  
+  # Store the transition matrix in the list
+  transition_matrices[[ind]] <- full_transition_matrix
 }
 
-p
+# Sum transition matrices across individuals
+combined_transition_matrix <- Reduce("+", transition_matrices)
 
-#NEXT: is there a way of combining all the matrices of each ind into one?
+# Normalize the combined transition matrix by row sums to get probabilities
+combined_transition_matrix <- prop.table(combined_transition_matrix, 1)
+
+# Convert the combined transition matrix to a dataframe for plotting
+combined_transition_df <- as.data.frame(as.table(combined_transition_matrix))
+colnames(combined_transition_df) <- c("From", "To", "Frequency")
+
+# Remove rows with NA values in the From or To columns
+combined_transition_df <- combined_transition_df %>%
+  filter(!is.na(From) & !is.na(To))
+
+#also filter calls not interested in having in the plot such as snore
+combined_transition_df <- combined_transition_df %>%
+  filter(From != "snore" & To != "snore")
+
+#only plot for rhythmic calls
+combined_transition_df <- combined_transition_df %>%
+  filter(From != "squeal chittering" & To != "squeal chittering")
+combined_transition_df <- combined_transition_df %>%
+  filter(From != "hum" & To != "hum")
+combined_transition_df <- combined_transition_df %>%
+  filter(From != "growl" & To != "growl")
+combined_transition_df <- combined_transition_df %>%
+  filter(From != "bop" & To != "bop")
+combined_transition_df <- combined_transition_df %>%
+  filter(From != "grunt" & To != "grunt")
+combined_transition_df <- combined_transition_df %>%
+  filter(From != "click" & To != "click")
+combined_transition_df <- combined_transition_df %>%
+  filter(From != "chirp" & To != "chirp")
 
 
+# Plot the combined transition matrix
+p <- ggplot(combined_transition_df, aes(x = From, y = To, fill = Frequency)) +
+  geom_tile(color = "white") +
+  scale_fill_gradient(low = "white", high = "purple4") +
+  labs(title = "Combined Transition Matrix for All Individuals",
+       x = "From Call Type",
+       y = "To Call Type") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
 
+print(p)
 
+ggsave(filename = paste0(plot_dir, 'rhythmic_transition+matrix.png'), plot = p, width = 6, height = 5, dpi = 300)
 
-
+#--------------------------------------------
+# #normalising the data and transition call has to be within 1min of previous call to count
+# # Prepare the data
+# calls <- cleaned %>%
+#   filter(label != "snore") %>%  # Exclude rows where the label is "snore"
+#   arrange(id, datetime) %>%  # Arrange by individual and time
+#   group_by(id) %>%  # Group by individual
+#   mutate(next_call_type = if_else(lead(date) == date & (lead(datetime) - datetime <= minutes(1)), lead(label), NA_character_)) %>%  # Create a column for the next call type within 1 minute
+#   filter(!is.na(label) & !is.na(next_call_type))  # Remove rows where the label or next call type is NA
+# 
+# # Get all unique call types
+# all_call_types <- unique(c(calls$label, calls$next_call_type))
+# 
+# # Create a complete transition matrix template
+# empty_transition_matrix <- matrix(0, nrow = length(all_call_types), ncol = length(all_call_types),
+#                                   dimnames = list(all_call_types, all_call_types))
+# 
+# # Create a list to store matrices for each individual
+# transition_matrices <- list()
+# 
+# # Get the unique individuals
+# individuals <- unique(calls$id)
+# 
+# # Generate transition matrices for each individual
+# for (ind in individuals) {
+#   # Filter data for the individual
+#   individual_calls <- calls %>%
+#     filter(id == ind)
+#   
+#   # Create a contingency table (transition matrix)
+#   transition_matrix <- table(individual_calls$label, individual_calls$next_call_type)
+#   
+#   # Convert the table to a matrix and ensure it matches the template dimensions
+#   transition_matrix <- as.matrix(transition_matrix)
+#   full_transition_matrix <- empty_transition_matrix
+#   full_transition_matrix[rownames(transition_matrix), colnames(transition_matrix)] <- transition_matrix
+#   
+#   # Normalize the transition matrix by the counts of the "From" call types
+#   from_call_counts <- rowSums(full_transition_matrix)
+#   normalized_transition_matrix <- sweep(full_transition_matrix, 1, from_call_counts, FUN = "/")
+#   normalized_transition_matrix[is.nan(normalized_transition_matrix)] <- 0  # Replace NaN with 0
+#   
+#   # Store the normalized transition matrix in the list
+#   transition_matrices[[ind]] <- normalized_transition_matrix
+# }
+# 
+# # Sum normalized transition matrices across individuals
+# combined_normalized_transition_matrix <- Reduce("+", transition_matrices)
+# 
+# # Convert the combined normalized transition matrix to a dataframe for plotting
+# combined_transition_df <- as.data.frame(as.table(combined_normalized_transition_matrix))
+# colnames(combined_transition_df) <- c("From", "To", "Frequency")
+# 
+# # Remove rows with NA values in the From or To columns
+# combined_transition_df <- combined_transition_df %>%
+#   filter(!is.na(From) & !is.na(To))
+# 
+# # Remove rows and columns where the call type is "snore"
+# combined_transition_df <- combined_transition_df %>%
+#   filter(From != "snore" & To != "snore")
+# 
+# # Plot the combined normalized transition matrix
+# p <- ggplot(combined_transition_df, aes(x = From, y = To, fill = Frequency)) +
+#   geom_tile(color = "white") +
+#   scale_fill_gradient(low = "white", high = "steelblue") +
+#   labs(title = "Combined Normalized Transition Matrix for All Individuals",
+#        x = "From Call Type (Initial Call)",
+#        y = "To Call Type (Subsequent Call)") +  # Explicitly state which call is first and which is second
+#   theme_minimal() +
+#   theme(axis.text.x = element_text(angle = 45, hjust = 1))
+# 
+# print(p)
 
 
 

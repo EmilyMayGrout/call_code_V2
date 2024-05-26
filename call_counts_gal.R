@@ -425,7 +425,8 @@ gg <- ggplot(call_rates_class_filt, aes(x = rate, y = name))+
   scale_color_manual(values = Paired_edit) +
 facet_grid(vars(age_sex), scales = "free", space = "free") +
   theme_bw() +
-  ylab("Individual") + 
+  ylab("Individual") +
+  xlab("Call rate (per hour)")+
   theme(panel.grid = element_blank(),  # Remove panel grid
   axis.title = element_text(size = 20),  # Increase axis title size
   axis.text = element_text(size = 16),  # Increase axis text size
@@ -604,17 +605,17 @@ ggsave(filename, combined_plot, height = 8, width = 10, units = "in")
 file_count <- data.frame(files)
 file_count$id <- str_extract(file_count$files, ".+?(?=_)")
 
-#add G to start of coati_ids so can merge
-coati_ids$id <- paste0("G", coati_ids$id)
-
 
 colnames(coati_ids)[colnames(coati_ids) == "V2"] <- "id"
+
+#add G to start of coati_ids so can merge
+coati_ids$id <- paste0("G", coati_ids$id)
 
 merged_data <- merge(coati_ids, file_count, by = "id", all = T)
 
 png(height = 1000, width = 1500, units = 'px', filename = paste0(plot_dir, "number_of_files_labelled.png"))
 par(mar = c(9, 4, 4, 2) + 2)
-barplot(table(merged_data$V1), xlab = "", ylab = "Number of files labelled", col = "darkorange2", cex.lab = 3, cex.axis = 3, cex.names = 3, las = 2)
+barplot(table(merged_data$V1), xlab = "", ylab = "Number of files labelled", col = "plum", cex.lab = 3, cex.axis = 3, cex.names = 3, las = 2)
 dev.off()
 
 
