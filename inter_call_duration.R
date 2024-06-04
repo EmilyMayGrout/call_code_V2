@@ -41,7 +41,9 @@ for (i in 1:length(files)) {
   # add the data to the all_data dataframe
   all_data <- rbind(all_data, file_data)
 }
-
+#which files have bops
+#bops <- all_data[all_data$label == "bop",]
+#table(bops$file_name)
 
 #remove rows which contain the date 
 all_data <- all_data[!grepl(":", all_data$label),]
@@ -229,6 +231,19 @@ desired_order <- c("chitter", "squeal", "dolphin call", "bark", "snort")
 
 # Convert the label variable to a factor with the desired order of levels
 filtered_data$label <- factor(filtered_data$label, levels = desired_order)
+
+mean(filtered_data$diff_time_s[filtered_data$label == "chitter"])
+sd(filtered_data$diff_time_s[filtered_data$label == "chitter"])
+
+mean(filtered_data$diff_time_s[filtered_data$label == "squeal"])
+sd(filtered_data$diff_time_s[filtered_data$label == "squeal"])
+
+mean(filtered_data$diff_time_s[filtered_data$label == "bark"])
+sd(filtered_data$diff_time_s[filtered_data$label == "bark"])
+
+mean(filtered_data$diff_time_s[filtered_data$label == "dolphin call"])
+sd(filtered_data$diff_time_s[filtered_data$label == "dolphin call"])
+
 
 
 png(height = 600, width = 1000, units = 'px', filename = paste0(plot_dir, "intercall_timediff.png"))

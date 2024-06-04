@@ -111,7 +111,7 @@ all_data_cleaned <- all_data_cleaned[!grepl("synch", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("bird", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("manakin", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("pant", all_data_cleaned$label),]
-all_data_cleaned <- all_data_cleaned[!grepl("vibrate", all_data_cleaned$label),]
+#all_data_cleaned <- all_data_cleaned[!grepl("vibrate", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("chittering", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("forag", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("fart", all_data_cleaned$label),]
@@ -122,6 +122,7 @@ all_data_cleaned <- all_data_cleaned[!grepl("start", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("stop", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("fission", all_data_cleaned$label),]
 all_data_cleaned <- all_data_cleaned[!grepl("fusion", all_data_cleaned$label),]
+all_data_cleaned <- all_data_cleaned[!grepl("scatch", all_data_cleaned$label),]
 
 
 #remove nf calls
@@ -168,7 +169,7 @@ cleaned <- all_data_cleaned
 
 #remove calls which are not described in the repertoire paper or calls where the sample size is also super small
 
-cleaned <- cleaned[!grepl("chop chop", cleaned$label),]
+#cleaned <- cleaned[!grepl("chop chop", cleaned$label),]
 cleaned <- cleaned[!grepl("peep", cleaned$label),]
 cleaned <- cleaned[!grepl("purr", cleaned$label),]
 cleaned <- cleaned[!grepl("quack", cleaned$label),]
@@ -193,12 +194,13 @@ call_rates <- data.frame(matrix(ncol = length(unique(cleaned$id)), nrow = length
 colnames(call_rates) <- unique(cleaned$id)
 row.names(call_rates) <- unique(cleaned$label)
 
-
+hours <- NA
 #going through each individual
 for (i in 1:length(data_list)){
   
   ind <- data_list[[i]]
   name <- unique(ind$id)
+  hours_labelled2 <- length(unique(ind$date))
   
   #going through each call type to get call rate per hour
   for (j in 1:length(unique(ind$label))){
@@ -213,11 +215,15 @@ for (i in 1:length(data_list)){
     call_rates[call_type, name] <- call_rate
     
   }
-}
+  hours <- rbind(hours_labelled2, hours)
+  }
 
 
 #because we have more data than originally, eventually we want to get the hours_labelled as the duration between the start and the stop time for each day, but for now using the last hours
 
+
+mean(na.omit(hours[,1]))
+sd(na.omit(hours[,1]))
 
 #----------------------------------------------------------
 #now to make some plots!
@@ -269,9 +275,16 @@ df_summary_rate <- call_rates_long %>%
 #view summary data
 df_summary_rate
 
+df_summary_rate$call_type[df_summary_rate$call_type == "dc"] <- "dolphin call"
+
+#remove calls not listed in paper
+df_summary_rate <- df_summary_rate[!df_summary_rate$call_type == "chuckle",]
+df_summary_rate <- df_summary_rate[!df_summary_rate$call_type == "whistle",]
+
+
 png(height = 700, width = 1000, units = 'px', filename = paste0(plot_dir, "summary_rates.png"))
 ggplot(df_summary_rate) +
-  geom_bar(aes(x=call_type, y=mean), stat='identity', fill='steelblue') +
+  geom_bar(aes(x=call_type, y=mean), stat='identity', fill='plum3') +
   geom_errorbar(aes(x=call_type, ymin=pmax(mean-sd,0), ymax=mean+sd), width=0.3, color='orange4') + theme_classic() +labs(x="Call type",y="Call rate (per hour)")+ theme(text=element_text(size=30))+ theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
 dev.off()
 
@@ -406,21 +419,22 @@ dev.off()
 #
 #-------------------------------------------------------------------
 #plot for paper:
+call_rates_class_filt <- call_rates_class[call_rates_class$call_type %in% c("chirp grunt", "chirp","chirp click", "chitter", "squeal", "dc", "bark", "grunt", "bop", "click", "hum"), ]
 
-Paired_edit <- c("aquamarine2","darkorchid4", "darkorchid", "darkorchid1", "orange", "darkorange2", "darkorange4")
-#bark, chirp, chirp click, chirp grunt, chitter, dc, squeal- color to function
+# Define color mapping
+Paired_edit <- c("orangered1", "lightskyblue1", "magenta1", "magenta3","magenta4", "orange", "plum1","olivedrab2", "steelblue2", "steelblue4", "darkorange3")
 
 #want to make the age/sex class label smaller
+# call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Adult Female"] <- "A-F"
+# call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Adult Male"] <- "A-M"
+# call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Sub-adult Male"] <- "SA-M"
+# call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Sub-adult Female"] <- "SA-F"
+# call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Juvenile Female"] <- "J-F"
 
-call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Adult Female"] <- "A-F"
-call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Adult Male"] <- "A-M"
-call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Sub-adult Male"] <- "SA-M"
-call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Sub-adult Female"] <- "SA-F"
-call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Juvenile Female"] <- "J-F"
-
+call_rates_class_filt$call_type[call_rates_class_filt$call_type == "dc"]<- "dolphin call"
 
 gg <- ggplot(call_rates_class_filt, aes(x = rate, y = name))+ 
-  geom_jitter(aes(color = call_type), size = 4, width = 0, height = 0.1, alpha = 0.8) +
+  geom_jitter(aes(color = call_type), size = 4, width = 0.1, height = 0.2, alpha = 0.8) +
   scale_x_continuous(limits = c(0,250))+# panel spacing
   scale_color_manual(values = Paired_edit) +
 facet_grid(vars(age_sex), scales = "free", space = "free") +
@@ -438,8 +452,8 @@ facet_grid(vars(age_sex), scales = "free", space = "free") +
 
 gg
 
-ggsave(filename = paste0(plot_dir, 'call_rates_gal2.png'), plot = gg, width = 12, height = 8, dpi = 300)
 
+ggsave(filename = paste0(plot_dir, 'call_rates_gal2.png'), plot = gg, width = 12, height = 10, dpi = 300)
 
 
 #save call rates for each ind

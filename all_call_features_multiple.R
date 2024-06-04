@@ -89,7 +89,7 @@ for (i in 1:length(lwf)) {
   #prop1$ACI <- ACI(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop1$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop1$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop1$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   # Calculate SNR
   if (lwf[[i]]@stereo) {
@@ -141,7 +141,7 @@ for (i in 1:length(lwf)) {
   #prop2$ACI <- ACI(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop2$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop2$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop2$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   # Calculate SNR
   if (lwf[[i]]@stereo) {
@@ -195,7 +195,7 @@ for (i in 1:length(lwf)) {
   #prop3$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop3$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop3$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop3$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   # Calculate SNR
   if (lwf[[i]]@stereo) {
@@ -242,7 +242,7 @@ for (i in 1:length(lwf)) {
   #prop4$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop4$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop4$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop4$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   # Calculate SNR
   if (lwf[[i]]@stereo) {
@@ -290,7 +290,7 @@ for (i in 1:length(lwf)) {
   #prop5$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop5$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop5$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop5$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   if ("WaveMC" %in% class(lwf[[i]])) {
     # For multi-channel WaveMC files, use both channels for SNR calculation
@@ -337,7 +337,7 @@ for (i in 1:length(lwf)) {
   #prop6$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop6$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop6$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop6$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   # Calculate SNR
   if (lwf[[i]]@stereo) {
@@ -381,7 +381,7 @@ for (i in 1:length(lwf)) {
   #prop7$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop7$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop7$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop7$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   # Calculate SNR
   if (lwf[[i]]@stereo) {
@@ -425,7 +425,7 @@ for (i in 1:length(lwf)) {
   #prop8$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop8$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop8$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop8$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   # Calculate SNR
   if (lwf[[i]]@stereo) {
@@ -477,7 +477,7 @@ for (i in 1:length(lwf)) {
   #prop9$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop9$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop9$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop9$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   if ("WaveMC" %in% class(lwf[[i]])) {
     # For multi-channel WaveMC files, use both channels for SNR calculation
@@ -524,7 +524,7 @@ for (i in 1:length(lwf)) {
   #prop10$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop10$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop10$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop10$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   # Calculate SNR
   if (lwf[[i]]@stereo) {
@@ -568,7 +568,7 @@ for (i in 1:length(lwf)) {
   #prop11$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop11$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop11$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop11$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   if ("WaveMC" %in% class(lwf[[i]])) {
     # For multi-channel WaveMC files, use both channels for SNR calculation
@@ -615,7 +615,7 @@ for (i in 1:length(lwf)) {
   #prop12$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop12$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop12$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop12$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   # Calculate SNR
   if (lwf[[i]]@stereo) {
@@ -659,7 +659,7 @@ for (i in 1:length(lwf)) {
   #prop13$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop13$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop13$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop13$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   if ("WaveMC" %in% class(lwf[[i]])) {
     # For multi-channel WaveMC files, use both channels for SNR calculation
@@ -706,7 +706,7 @@ for (i in 1:length(lwf)) {
   #prop14$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop14$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop14$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop14$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   # Calculate SNR
   if (lwf[[i]]@stereo) {
@@ -750,7 +750,7 @@ for (i in 1:length(lwf)) {
   #prop15$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
   #Entropy
   prop15$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop15$duration <- duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  prop15$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
   
   # Calculate SNR
   if (lwf[[i]]@stereo) {
@@ -768,6 +768,101 @@ for (i in 1:length(lwf)) {
   prop <- rbind(prop, prop15)
   
 }
+
+
+#cluck
+
+dir <- "D:/PhD/All things coati/Edic mini calls/each call type/cluck/"
+filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
+all_names = basename(filenames)
+lwf <- lapply(filenames, readWave)
+
+for (i in 1:length(lwf)) {
+  #spectro(lwf[[i]],f=lwf[[i]]@samp.rate,ovlp=85,zp=16, palette=jet.colors, osc=TRUE, collevels=seq(-29,0), grid = F)
+  f = lwf[[i]]@samp.rate
+  dat <- meanspec(lwf[[i]],f=lwf[[i]]@samp.rate , plot=F)
+  dat2 <- as.data.frame(dat)
+  #excluding rows where y is 1.0000
+  dat2 <- subset(dat2, y != 1)
+  #exclude rows where x is 0
+  dat2 <- subset(dat2, x != 0)
+  #dominant frequency is the frequency of max amplitude, which is x for the max of y in chirp_dat2
+  dom_freq <- dat2[dat2$y == max(dat2$y), 1]
+  prop16 <- as.data.frame(specprop(dat,f=lwf[[i]]@samp.rate))
+  prop16 <- prop16[, keep] 
+  prop16$dom_freq <- dom_freq*1000
+  #Acoustic complexity index
+  #prop15$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
+  #Entropy
+  prop16$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
+  prop16$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  
+  # Calculate SNR
+  if (lwf[[i]]@stereo) {
+    signal <- lwf[[i]]@right
+  } else {
+    signal <- lwf[[i]]@left
+  }
+  prop16$snr <- calculate_snr(signal)
+  
+  
+  prop16$name <- "cluck"
+  prop16$file <- all_names[i]
+  prop16$sum_calls <- length(all_names)
+  
+  prop <- rbind(prop, prop16)
+  
+}
+
+
+#bop
+
+dir <- "D:/PhD/All things coati/Edic mini calls/each call type/bop/"
+filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
+all_names = basename(filenames)
+lwf <- lapply(filenames, readWave)
+
+for (i in 1:length(lwf)) {
+  #spectro(lwf[[i]],f=lwf[[i]]@samp.rate,ovlp=85,zp=16, palette=jet.colors, osc=TRUE, collevels=seq(-29,0), grid = F)
+  f = lwf[[i]]@samp.rate
+  dat <- meanspec(lwf[[i]],f=lwf[[i]]@samp.rate , plot=F)
+  dat2 <- as.data.frame(dat)
+  #excluding rows where y is 1.0000
+  dat2 <- subset(dat2, y != 1)
+  #exclude rows where x is 0
+  dat2 <- subset(dat2, x != 0)
+  #dominant frequency is the frequency of max amplitude, which is x for the max of y in chirp_dat2
+  dom_freq <- dat2[dat2$y == max(dat2$y), 1]
+  prop17 <- as.data.frame(specprop(dat,f=lwf[[i]]@samp.rate))
+  prop17 <- prop17[, keep] 
+  prop17$dom_freq <- dom_freq*1000
+  #Acoustic complexity index
+  #prop15$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
+  #Entropy
+  prop17$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
+  prop17$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+  
+  # Calculate SNR
+  if (lwf[[i]]@stereo) {
+    signal <- lwf[[i]]@right
+  } else {
+    signal <- lwf[[i]]@left
+  }
+  prop17$snr <- calculate_snr(signal)
+  
+  
+  prop17$name <- "bop"
+  prop17$file <- all_names[i]
+  prop17$sum_calls <- length(all_names)
+  
+  prop <- rbind(prop, prop17)
+  
+}
+
+
+
+
+
 
 
 #this works, now need to think about what other features should be extracted
@@ -830,7 +925,7 @@ for (i in 1:nrow(stand_dev)){
 stand_dev2 <- stand_dev[,c("name","sum_calls","duration", "dom_freq", "sh", "sfm", "Q25", "Q75", "IQR")]
 
 #manually order the table by name
-stand_dev2 <- stand_dev2 %>% arrange(factor(name, levels = c("chirp", "click", "grunt", "chitter", "squeal", "growl", "bark", "dc", "hum", "vibrate" )))
+stand_dev2 <- stand_dev2 %>% arrange(factor(name, levels = c("chirp", "click", "grunt", "chitter", "squeal", "growl", "bark", "dc", "hum", "bop", "cluck", "vibrate" )))
 
 #colnames(filt2)[colnames(filt2) == "mode"] <- "Dominant Frequency (Hz)"
 
@@ -858,10 +953,13 @@ filename <- "C:/Users/egrout/Dropbox/calls/results/durations_and_dom_freq.png"
 
 # Set up the plot
 png(filename, height = 900, width = 1200, units = 'px')
-par(mar = c(10, 8, 2, 10), mgp = c(6, 1, 0))  # c(bottom, left, top, right))
+par(mar = c(12, 8, 2, 10), mgp = c(6, 1, 0))  # c(bottom, left, top, right))
 
 # Plot the data
 dur_df <- prop[, c("duration", "dom_freq", "name")]
+#change dc to dolphin-call
+dur_df$name[dur_df$name == "dc"] <- "dolphin call"
+
 
 # Scale the duration values for better visualization
 scale <- 50000
@@ -870,7 +968,7 @@ scaled_duration <- dur_df$duration * scale  # Adjust the scaling factor as neede
 # Create the plot with the scaled duration values
 boxplot(scaled_duration ~ dur_df$name, ylab = " ", xlab = "", col = "plum", border = "black", method = "jitter", pch = 1, las = 2, horizontal = FALSE, boxwex = 0.3, cex.axis = 2, cex.lab = 2, yaxt = "n")
 mtext("Duration (s)", side = 2, line = 5, cex = 2)
-mtext("Call Type", side = 1, line = 7, cex = 2)
+mtext("Call Type", side = 1, line = 10.5, cex = 2)
 
 # Calculate positions for the second boxplot
 num_categories <- length(unique(dur_df$name))
