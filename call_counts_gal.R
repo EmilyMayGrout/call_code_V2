@@ -421,8 +421,6 @@ dev.off()
 #plot for paper:
 call_rates_class_filt <- call_rates_class[call_rates_class$call_type %in% c("chirp grunt", "chirp","chirp click", "chitter", "squeal", "dc", "bark", "grunt", "bop", "click", "hum"), ]
 
-# Define color mapping
-Paired_edit <- c("orangered1", "lightskyblue1", "magenta1", "magenta3","magenta4", "orange", "plum1","olivedrab2", "steelblue2", "steelblue4", "darkorange3")
 
 #want to make the age/sex class label smaller
 # call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Adult Female"] <- "A-F"
@@ -432,6 +430,28 @@ Paired_edit <- c("orangered1", "lightskyblue1", "magenta1", "magenta3","magenta4
 # call_rates_class_filt$age_sex2[call_rates_class_filt$age_sex== "Juvenile Female"] <- "J-F"
 
 call_rates_class_filt$call_type[call_rates_class_filt$call_type == "dc"]<- "dolphin call"
+
+
+# Example reorder of call_type legend keys
+desired_order <- c("chirp","chirp grunt","chirp click","click","grunt",
+                   "chitter","squeal", 
+                   "dolphin call",
+                   "bark", 
+                   "hum","bop")  # Replace with your desired order
+
+# Define color mapping
+Paired_edit <- c("#FF00C8", "magenta3","mediumpurple1","slateblue","slateblue4",
+                 "orangered1", "red3",
+                 "gold",
+                 "steelblue1", 
+                 "olivedrab1","olivedrab3")
+
+
+
+# Ensure call_type is treated as a factor with desired levels
+call_rates_class_filt$call_type <- factor(call_rates_class_filt$call_type, levels = desired_order)
+
+
 
 gg <- ggplot(call_rates_class_filt, aes(x = rate, y = name))+ 
   geom_jitter(aes(color = call_type), size = 4, width = 0.1, height = 0.2, alpha = 0.8) +

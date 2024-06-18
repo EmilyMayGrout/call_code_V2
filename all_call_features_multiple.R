@@ -53,7 +53,7 @@ keep <- c("mode", "median", "sh", "Q25", "Q75","IQR", "skewness", "kurtosis", "c
 
 #growl
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/growl/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/growl/"
 
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 unique(filenames)
@@ -82,7 +82,7 @@ for (i in 1:length(lwf)) {
   dat2 <- subset(dat2, x < 4)
   #dominant frequency is the frequency of max amplitude, which is x for the max of y in chirp_dat2
   dom_freq <- dat2[dat2$y == max(dat2$y),1]
-  prop1 <- as.data.frame(specprop(dat,f= lwf[[i]]@samp.rate))
+  prop1 <- as.data.frame(specprop(dat, f=lwf[[i]]@samp.rate))
   prop1 <- prop1[, keep] 
   prop1$dom_freq <- dom_freq*1000
   #Acoustic complexity index
@@ -110,7 +110,7 @@ for (i in 1:length(lwf)) {
 
 #chirp
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/chirp/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/chirp/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -161,7 +161,7 @@ for (i in 1:length(lwf)) {
 
 #chitter
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/chitter/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/chitter/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -216,7 +216,7 @@ for (i in 1:length(lwf)) {
 
 #click
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/click/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/click/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -265,7 +265,7 @@ for (i in 1:length(lwf)) {
 
 #grunt
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/grunt/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/grunt/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -314,7 +314,7 @@ for (i in 1:length(lwf)) {
 
 #dc
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/dc/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/dc/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -358,7 +358,7 @@ for (i in 1:length(lwf)) {
 
 #vibrate
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/vibrate/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/vibrate/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -402,7 +402,7 @@ for (i in 1:length(lwf)) {
 
 #squeal
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/squeal/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/squeal/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -449,7 +449,7 @@ for (i in 1:length(lwf)) {
 
 
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/bark/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/bark/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -501,7 +501,7 @@ for (i in 1:length(lwf)) {
 
 #hum
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/hum/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/hum/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -545,7 +545,7 @@ for (i in 1:length(lwf)) {
 
 #chopchop
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/chopchop/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/chopchop/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -592,7 +592,7 @@ for (i in 1:length(lwf)) {
 
 #roar
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/roar/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/roar/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -636,7 +636,7 @@ for (i in 1:length(lwf)) {
 
 #snort
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/snort/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/snort/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -682,52 +682,52 @@ for (i in 1:length(lwf)) {
 }
 
 #squawk
-
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/squawk/"
-filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
-all_names = basename(filenames)
-lwf <- lapply(filenames, readWave)
-
-for (i in 1:length(lwf)) {
-  #spectro(lwf[[i]],f=lwf[[i]]@samp.rate,ovlp=85,zp=16, palette=jet.colors, osc=TRUE, collevels=seq(-29,0), grid = F)
-  f = lwf[[i]]@samp.rate
-  dat <- meanspec(lwf[[i]],f=lwf[[i]]@samp.rate , plot=F)
-  dat2 <- as.data.frame(dat)
-  #excluding rows where y is 1.0000
-  dat2 <- subset(dat2, y != 1)
-  #exclude rows where x is 0
-  dat2 <- subset(dat2, x != 0)
-  #dominant frequency is the frequency of max amplitude, which is x for the max of y in chirp_dat2
-  dom_freq <- dat2[dat2$y == max(dat2$y), 1]
-  prop14 <- as.data.frame(specprop(dat,f=lwf[[i]]@samp.rate))
-  prop14 <- prop14[, keep] 
-  prop14$dom_freq <- dom_freq*1000
-  #Acoustic complexity index
-  #prop14$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
-  #Entropy
-  prop14$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop14$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
-  
-  # Calculate SNR
-  if (lwf[[i]]@stereo) {
-    signal <- lwf[[i]]@right
-  } else {
-    signal <- lwf[[i]]@left
-  }
-  prop14$snr <- calculate_snr(signal)
-  
-  
-  prop14$name <- "squawk"
-  prop14$file <- all_names[i]
-  prop14$sum_calls <- length(all_names)
-  
-  prop <- rbind(prop, prop14)
-  
-}
+# 
+# dir <- "C:/Users/egrout/Dropbox/calls/each call type/squawk/"
+# filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
+# all_names = basename(filenames)
+# lwf <- lapply(filenames, readWave)
+# 
+# for (i in 1:length(lwf)) {
+#   #spectro(lwf[[i]],f=lwf[[i]]@samp.rate,ovlp=85,zp=16, palette=jet.colors, osc=TRUE, collevels=seq(-29,0), grid = F)
+#   f = lwf[[i]]@samp.rate
+#   dat <- meanspec(lwf[[i]],f=lwf[[i]]@samp.rate , plot=F)
+#   dat2 <- as.data.frame(dat)
+#   #excluding rows where y is 1.0000
+#   dat2 <- subset(dat2, y != 1)
+#   #exclude rows where x is 0
+#   dat2 <- subset(dat2, x != 0)
+#   #dominant frequency is the frequency of max amplitude, which is x for the max of y in chirp_dat2
+#   dom_freq <- dat2[dat2$y == max(dat2$y), 1]
+#   prop14 <- as.data.frame(specprop(dat,f=lwf[[i]]@samp.rate))
+#   prop14 <- prop14[, keep] 
+#   prop14$dom_freq <- dom_freq*1000
+#   #Acoustic complexity index
+#   #prop14$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
+#   #Entropy
+#   prop14$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
+#   prop14$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+#   
+#   # Calculate SNR
+#   if (lwf[[i]]@stereo) {
+#     signal <- lwf[[i]]@right
+#   } else {
+#     signal <- lwf[[i]]@left
+#   }
+#   prop14$snr <- calculate_snr(signal)
+#   
+#   
+#   prop14$name <- "squawk"
+#   prop14$file <- all_names[i]
+#   prop14$sum_calls <- length(all_names)
+#   
+#   prop <- rbind(prop, prop14)
+#   
+# }
 
 #squeak
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/squeak/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/squeak/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -772,52 +772,52 @@ for (i in 1:length(lwf)) {
 
 #cluck
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/cluck/"
-filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
-all_names = basename(filenames)
-lwf <- lapply(filenames, readWave)
-
-for (i in 1:length(lwf)) {
-  #spectro(lwf[[i]],f=lwf[[i]]@samp.rate,ovlp=85,zp=16, palette=jet.colors, osc=TRUE, collevels=seq(-29,0), grid = F)
-  f = lwf[[i]]@samp.rate
-  dat <- meanspec(lwf[[i]],f=lwf[[i]]@samp.rate , plot=F)
-  dat2 <- as.data.frame(dat)
-  #excluding rows where y is 1.0000
-  dat2 <- subset(dat2, y != 1)
-  #exclude rows where x is 0
-  dat2 <- subset(dat2, x != 0)
-  #dominant frequency is the frequency of max amplitude, which is x for the max of y in chirp_dat2
-  dom_freq <- dat2[dat2$y == max(dat2$y), 1]
-  prop16 <- as.data.frame(specprop(dat,f=lwf[[i]]@samp.rate))
-  prop16 <- prop16[, keep] 
-  prop16$dom_freq <- dom_freq*1000
-  #Acoustic complexity index
-  #prop15$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
-  #Entropy
-  prop16$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
-  prop16$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
-  
-  # Calculate SNR
-  if (lwf[[i]]@stereo) {
-    signal <- lwf[[i]]@right
-  } else {
-    signal <- lwf[[i]]@left
-  }
-  prop16$snr <- calculate_snr(signal)
-  
-  
-  prop16$name <- "cluck"
-  prop16$file <- all_names[i]
-  prop16$sum_calls <- length(all_names)
-  
-  prop <- rbind(prop, prop16)
-  
-}
+# dir <- "C:/Users/egrout/Dropbox/calls/each call type/cluck/"
+# filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
+# all_names = basename(filenames)
+# lwf <- lapply(filenames, readWave)
+# 
+# for (i in 1:length(lwf)) {
+#   #spectro(lwf[[i]],f=lwf[[i]]@samp.rate,ovlp=85,zp=16, palette=jet.colors, osc=TRUE, collevels=seq(-29,0), grid = F)
+#   f = lwf[[i]]@samp.rate
+#   dat <- meanspec(lwf[[i]],f=lwf[[i]]@samp.rate , plot=F)
+#   dat2 <- as.data.frame(dat)
+#   #excluding rows where y is 1.0000
+#   dat2 <- subset(dat2, y != 1)
+#   #exclude rows where x is 0
+#   dat2 <- subset(dat2, x != 0)
+#   #dominant frequency is the frequency of max amplitude, which is x for the max of y in chirp_dat2
+#   dom_freq <- dat2[dat2$y == max(dat2$y), 1]
+#   prop16 <- as.data.frame(specprop(dat,f=lwf[[i]]@samp.rate))
+#   prop16 <- prop16[, keep] 
+#   prop16$dom_freq <- dom_freq*1000
+#   #Acoustic complexity index
+#   #prop15$ACI <- ACI(lwf[[i]], channel = 1, wl = 512, ovlp = 0,  wn = "hamming", flim = NULL, nbwindows = 1)
+#   #Entropy
+#   prop16$entropy <- H(lwf[[i]], lwf[[i]]@samp.rate, channel = 1, wl = 512, envt="hil", msmooth = NULL, ksmooth = NULL)
+#   prop16$duration <- seewave::duration(lwf[[i]], lwf[[i]]@samp.rate, channel=1)
+#   
+#   # Calculate SNR
+#   if (lwf[[i]]@stereo) {
+#     signal <- lwf[[i]]@right
+#   } else {
+#     signal <- lwf[[i]]@left
+#   }
+#   prop16$snr <- calculate_snr(signal)
+#   
+#   
+#   prop16$name <- "cluck"
+#   prop16$file <- all_names[i]
+#   prop16$sum_calls <- length(all_names)
+#   
+#   prop <- rbind(prop, prop16)
+#   
+# }
 
 
 #bop
 
-dir <- "D:/PhD/All things coati/Edic mini calls/each call type/bop/"
+dir <- "C:/Users/egrout/Dropbox/calls/each call type/bop/"
 filenames <- list.files(dir, pattern=".wav", full.names=TRUE)
 all_names = basename(filenames)
 lwf <- lapply(filenames, readWave)
@@ -876,7 +876,6 @@ boxplot(kurtosis ~ name, prop)
 #--------------------------------------------------------------------------
 #make a dataframe with the standard deviation of each feature for each call type to add to paper
 
-### NEED TO ADD SUM_CALLS TO THIS DATAFRAME (TO GET NUMBER OF CALLS USED FOR THE ACOUSTIC ANALYSIS)
 
 #make empty dataframe with same number of columns in prop and same number of rows as call type
 stand_dev <- data.frame(matrix(ncol = ((length(keep) + 7)), nrow = length(unique(prop$name))))
@@ -960,6 +959,18 @@ dur_df <- prop[, c("duration", "dom_freq", "name")]
 #change dc to dolphin-call
 dur_df$name[dur_df$name == "dc"] <- "dolphin call"
 
+#save df for Alie to look at
+write.csv(dur_df, "C:/Users/egrout/Dropbox/calls/results/duration_domfreq_allcalls.csv", row.names=FALSE)
+
+# Calculate mean duration for each call type
+mean_durations <- tapply(dur_df$duration, dur_df$name, mean)
+
+# Order call types by mean duration and handle ties by adding a small unique value
+ordered_names <- names(sort(mean_durations, decreasing = TRUE))
+
+# Create a factor with the ordered levels
+dur_df$name <- factor(dur_df$name, levels = ordered_names)
+
 
 # Scale the duration values for better visualization
 scale <- 50000
@@ -998,7 +1009,7 @@ dev.off()
 
 dur_dom <- prop[,c("duration", "name", "dom_freq")]
 
-plot(log(dur_dom$duration), dur_dom$dom_freq)
+plot(dur_dom$duration, dur_dom$dom_freq)
 
 
 

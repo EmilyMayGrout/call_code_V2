@@ -246,10 +246,10 @@ sd(filtered_data$diff_time_s[filtered_data$label == "dolphin call"])
 
 
 
-png(height = 600, width = 1000, units = 'px', filename = paste0(plot_dir, "intercall_timediff.png"))
+png(height = 600, width = 800, units = 'px', filename = paste0(plot_dir, "intercall_timediff.png"))
 # Plot the reordered data
 ggplot(filtered_data, aes(y = label, x = diff_time_s)) +
-  geom_violin(fill = "plum") +
+  geom_violin(fill = "plum2") +
   labs(
     #title = "Distribution of diff_time for Call Types (diff_time < 1 seconds)",
     y = "Call Type",
@@ -259,7 +259,7 @@ ggplot(filtered_data, aes(y = label, x = diff_time_s)) +
         panel.grid.major = element_blank(), 
         panel.grid.minor = element_blank(), 
         panel.background = element_blank(), 
-        axis.text = element_text(size = 20), 
+        axis.text = element_text(size = 24), 
         axis.title = element_text(size = 20), 
         legend.text = element_text(size = 20))
 dev.off()
@@ -381,16 +381,37 @@ combined_transition_df <- combined_transition_df %>%
 # Plot the combined transition matrix
 p <- ggplot(combined_transition_df, aes(x = From, y = To, fill = Frequency)) +
   geom_tile(color = "white") +
-  scale_fill_gradient(low = "white", high = "purple4") +
+  scale_fill_gradient(low = "white", high = "magenta4") +
   labs(title = "Combined Transition Matrix for All Individuals",
        x = "From Call Type",
        y = "To Call Type") +
   theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme(
+    axis.text.x = element_text(angle = 45, hjust = 1, size = 22),  # Increase x-axis text size
+    axis.text.y = element_text(size = 22),  # Increase y-axis text size
+    axis.title.x = element_text(size = 20),  # Increase x-axis title size
+    axis.title.y = element_text(size = 20),  # Increase y-axis title size
+    plot.title = element_text(size = 24),  # Increase plot title size
+    legend.title = element_text(size = 18),  # Increase legend title size
+    legend.text = element_text(size = 16)  # Increase legend text size
+  )
 
 print(p)
 
-ggsave(filename = paste0(plot_dir, 'rhythmic_transition+matrix.png'), plot = p, width = 6, height = 5, dpi = 300)
+ggsave(filename = paste0(plot_dir, 'rhythmic_transition+matrix.png'), plot = p, width = 9, height = 8, dpi = 300)
+
+
+#get the mean values for each transistion being the same call
+
+
+same_transition_means <- combined_transition_df %>%
+  filter(From == To)%>%
+  summarise(
+    mean_Frequency = mean(Frequency),
+    sd_Frequency = sd(Frequency)
+  )
+
+
 
 #--------------------------------------------
 # #normalising the data and transition call has to be within 1min of previous call to count

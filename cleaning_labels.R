@@ -1,7 +1,7 @@
 #this script is for cleaning the labels and saving them back into the same file structure but in a different folder
 
 #read in labels 
-wd <- "C:/Users/egrout/Dropbox/coaticalls/Galaxy_labels/completed_labels/labels_25.02.24/"
+wd <- "C:/Users/egrout/Dropbox/calls/Galaxy_labels/completed_labels/"
 
 setwd <- wd
 
@@ -20,7 +20,7 @@ colnames(all_data) <- c("label","Start","Duration","Time","Format","Type","Descr
 #i = 67
 
 #directory cleaned labels are saved into
-output_dir <- "C:/Users/egrout/Dropbox/coaticalls/Galaxy_labels/completed_labels/labels_cleaned_25.02.24/"
+output_dir <- "C:/Users/egrout/Dropbox/calls/Galaxy_labels/completed_labels/"
 
 #create data frame with 0 rows and 3 columns, so can check if all labels cleaned here have been corrected
 #all_data <- data.frame(matrix(ncol = 8, nrow = 0))
